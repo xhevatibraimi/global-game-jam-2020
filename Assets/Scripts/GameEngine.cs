@@ -6,6 +6,7 @@ using UnityEngine;
 public class GameEngine : MonoBehaviour
 {
     //static GameEngine Instance = new GameEngine();
+    public GameObject FallingObject;
     public GameObject RootObject;
     public GameObject DnaChain;
     public GameObject DnaPair;
@@ -18,8 +19,10 @@ public class GameEngine : MonoBehaviour
     private void InitChain()
     {
         var rootObject = Instantiate(RootObject);
+        var fallingObject = Instantiate(FallingObject);
+        fallingObject.transform.parent = rootObject.transform;
         var dnaChainObject = Instantiate(DnaChain);
-        dnaChainObject.transform.parent = rootObject.transform;
+        dnaChainObject.transform.parent = fallingObject.transform;
 
         var counter = 0;
         var rotationY = 0.0f;
