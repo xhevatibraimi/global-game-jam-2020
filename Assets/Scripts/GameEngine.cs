@@ -24,15 +24,15 @@ public class GameEngine : MonoBehaviour
         var counter = 0;
         var rotationY = 0.0f;
         var positionY = 0.0f;
-        while (counter < 5)
+        while (counter < 128)
         {
             var dnaPair = InstantiateDnaPair();
             dnaPair.transform.localPosition = new Vector3(0, positionY, 0);
-            dnaPair.transform.localRotation = new Quaternion(0, rotationY, 0, 0);
+            dnaPair.transform.localRotation = Quaternion.Euler(0, rotationY, 0);
             dnaPair.transform.parent = dnaChainObject.transform;
             counter++;
-            rotationY += 90.0f;
-            positionY += 2.5f;
+            rotationY -= 15.0f;
+            positionY += 2f;
         }
     }
 
