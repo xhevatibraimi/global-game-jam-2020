@@ -26,7 +26,10 @@ public class GameEngine : MonoBehaviour
     private GameObject InstantiateDnaPair()
     {
         var dnaPair = Instantiate(DnaPair);
-     var childrenComponents   =dnaPair.GetComponentsInChildren<Material>();
+        var childrenComponents = dnaPair.GetComponentsInChildren<Material>();
+        
+        // modify materials
 
+        return dnaPair;
     }
 }
