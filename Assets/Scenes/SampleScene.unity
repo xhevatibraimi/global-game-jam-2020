@@ -171,6 +171,7 @@ MonoBehaviour:
   DnaChain: {fileID: 2608439993434919283, guid: 4379caabba0fda041a456a104ebaa4a1,
     type: 3}
   DnaPair: {fileID: 1132590227607621666, guid: cd3de1cae9fd8ad48925f6eeefdcaa5b, type: 3}
+  NumberOfDnaPairs: 64
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0

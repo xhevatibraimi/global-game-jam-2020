@@ -10,7 +10,7 @@ public class GameEngine : MonoBehaviour
     public GameObject RootObject;
     public GameObject DnaChain;
     public GameObject DnaPair;
-
+    public int NumberOfDnaPairs = 1;
     void Start()
     {
         InitChain();
@@ -27,15 +27,15 @@ public class GameEngine : MonoBehaviour
         var counter = 0;
         var rotationY = 0.0f;
         var positionY = 0.0f;
-        while (counter < 32)
+        while (counter < NumberOfDnaPairs)
         {
             var dnaPair = InstantiateDnaPair();
             dnaPair.transform.localPosition = new Vector3(0, positionY, 0);
-            dnaPair.transform.localRotation = Quaternion.Euler(0, rotationY , 0);
+            dnaPair.transform.localRotation = Quaternion.Euler(0, rotationY, 0);
             dnaPair.transform.parent = dnaChainObject.transform;
             counter++;
-            rotationY -= 15.0f;
-            positionY += 2f;
+            rotationY -= FallingObjectController.RotatingSpeed;
+            positionY += FallingObjectController.YSpeed;
         }
     }
 
