@@ -41,6 +41,8 @@ public class GameEngine : MonoBehaviour
     {
         HandleInput();
     }
+
+    #region Handle Kick Action
     private void HandleInput()
     {
         if (HasInput())
@@ -61,8 +63,6 @@ public class GameEngine : MonoBehaviour
             || Input.GetKey(KeyCode.N)
             || Input.GetKey(KeyCode.M);
     }
-
-    #region Handle Kick Action
     private static bool[] GetInput()
     {
         return new bool[] {
@@ -126,26 +126,22 @@ public class GameEngine : MonoBehaviour
             Debug.Log("no missing");
         }
     }
-
     private void DecrementScore()
     {
         GameScore--;
         UpdateScore();
     }
-
     private void IncrementScore(int points)
     {
         GameScore += points;
         UpdateScore();
     }
-
     private void UpdateScore()
     {
         if (GameScore < 0) GameScore = 0;
         Debug.ClearDeveloperConsole();
         Debug.Log(GameScore);
     }
-
     private List<Color> GetClickedColors(bool[] input)
     {
         var colors = new List<Color>();
@@ -158,11 +154,6 @@ public class GameEngine : MonoBehaviour
         }
         return colors;
     }
-
-    private bool RendererHasMaterial(Renderer renderer, ActionColor color)
-    {
-        return renderer.material == Colors[(int)color - 1];
-    }
     private DnaPairModel GetElementInActionRange()
     {
         var element = DnaPairsList.FirstOrDefault(dnaPair => dnaPair.GameObj.transform.position.y > ActionRangeDown
@@ -170,6 +161,7 @@ public class GameEngine : MonoBehaviour
         return element;
     }
     #endregion
+
     #region Initialize
     private void InitChain()
     {
@@ -221,10 +213,10 @@ public class GameEngine : MonoBehaviour
     }
     private (Material Left, Material Right) GetRandomColorPair()
     {
-        var materials = Colors.OrderBy(_ => System.Guid.NewGuid().ToString()).ToList();
+        var materials = Colors.OrderBy(_ => Guid.NewGuid().ToString()).ToList();
         return (materials[0], materials[1]);
     }
-    void ConfigurePair(DnaPairMode pairMode, DnaPairModel pair)
+    private void ConfigurePair(DnaPairMode pairMode, DnaPairModel pair)
     {
         switch (pairMode)
         {
@@ -245,6 +237,8 @@ public class GameEngine : MonoBehaviour
     private void ConfigureBothMissingDnaPair(DnaPairModel pair)
     {
         var (leftColor, rightColor) = GetRandomColorPair();
+        pair.ColorsMissing.Add(FindColorIndex(leftColor));
+        pair.ColorsMissing.Add(FindColorIndex(rightColor));
         foreach (var renderer in pair.ChildRenderers)
         {
             if (renderer.gameObject.tag == Constants.Tags.Frame)
@@ -254,16 +248,27 @@ public class GameEngine : MonoBehaviour
                 renderer.material = leftColor;
             else if (renderer.gameObject.tag == Constants.Tags.BridgeLeft)
                 renderer.material = ColorMissing;
-
             else if (renderer.gameObject.tag == Constants.Tags.NodeRight)
                 renderer.material = rightColor;
             else if (renderer.gameObject.tag == Constants.Tags.BridgeRight)
                 renderer.material = ColorMissing;
+
         }
+    }
+    int FindColorIndex(Material material)
+    {
+        for (int i = 0; i < Colors.Count; i++)
+        {
+            if (material.color == Colors[i].color)
+                return i;
+        }
+        return 0;
     }
     private void ConfigureLeftMissingDnaPair(DnaPairModel pair)
     {
         var (leftColor, rightColor) = GetRandomColorPair();
+        pair.ColorsMissing.Add(FindColorIndex(leftColor));
+
         foreach (var renderer in pair.ChildRenderers)
         {
 
@@ -284,6 +289,8 @@ public class GameEngine : MonoBehaviour
     private void ConfigureRightMissingDnaPair(DnaPairModel pair)
     {
         var (leftColor, rightColor) = GetRandomColorPair();
+        pair.ColorsMissing.Add(FindColorIndex(rightColor));
+
         foreach (var renderer in pair.ChildRenderers)
         {
             if (renderer.gameObject.tag == Constants.Tags.Frame)
@@ -326,6 +333,7 @@ public class GameEngine : MonoBehaviour
         {
             var dnaPair = new DnaPairModel();
             dnaPair.GameObj = Instantiate(go);
+            dnaPair.InstanceId = dnaPair.GameObj.GetInstanceID();
             dnaPair.GameObj.transform.parent = parent;
             dnaPair.GameObj.transform.localPosition = Vector3.zero;
             dnaPair.ChildRenderers = dnaPair.GameObj.GetComponentsInChildren<Renderer>().ToList();
