@@ -7,8 +7,8 @@ TagManager:
   - BridgeLeft
   - BridgeRight
   - Frame
-  - Node
-  - node
+  - NodeLeft
+  - NodeRight
   layers:
   - Default
   - TransparentFX

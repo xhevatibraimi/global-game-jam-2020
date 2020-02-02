@@ -52,69 +52,20 @@ public class GameEngine : MonoBehaviour
         while (counter < NumberOfDnaPairs)
         {
             isOddDnaPairPosition = !isOddDnaPairPosition;
-            var dnaPair = Instantiate(DnaPair);
+            GameObject dnaPair = null;
+            if (isOddDnaPairPosition)
+            {
+                dnaPair = InstantiateDnaPair(DnaPairMode.Default);
+            }
+            else
+            {
+                var random1to3 = random.Next(0, 3);
+                dnaPair = InstantiateDnaPair((DnaPairMode)random1to3);
+            }
+
             dnaPair.transform.localPosition = new Vector3(0, positionY, 0);
             dnaPair.transform.localRotation = Quaternion.Euler(0, rotationY, 0);
             dnaPair.transform.parent = dnaChainObject.transform;
-
-            var childRenderers = dnaPair.GetComponentsInChildren<Renderer>();
-
-            foreach (var renderer in childRenderers)
-            {
-                bool isLeftBridge = renderer.gameObject.tag == Constants.Tags.LeftBridge;
-                bool isRightBridge = renderer.gameObject.tag == Constants.Tags.RightBridge;
-
-                // isBridge
-                if (isLeftBridge || isRightBridge)
-                {
-                    if (isOddDnaPairPosition)
-                    {
-                        renderer.material = GetRandomMaterial();
-                    }
-                    else
-                    {
-                        // create missing
-                        var randomNumber1to3 = random.Next(0, 3);
-
-                        // left missing
-                        if (randomNumber == 0)
-                        {
-                            renderer.material = ColorMissing;
-                            if (isLeftBridge)
-                                renderer.material = ColorMissing;
-                            else
-                                renderer.material = GetRandomMaterial();
-                        }
-                        // right missing
-                        else if (randomNumber == 1)
-                        {
-                            if (isRightBridge)
-                                renderer.material = ColorMissing;
-                            else
-                                renderer.material = GetRandomMaterial();
-                        }
-                        // both missing
-                        else if (randomNumber == 2)
-                        {
-                            renderer.material = ColorMissing;
-                        }
-                    }
-                }
-                else
-                {
-                    bool isFrame = renderer.gameObject.tag == "Frame";
-                    bool isNode = renderer.gameObject.tag == "node";
-                    // frame
-                    if (isFrame)
-                    {
-                        renderer.material = FrameMaterial;
-                    }
-                    else if (isNode)
-                    {
-                        renderer.material = NodeMaterial;
-                    }
-                }
-            }
 
             counter++;
             rotationY -= RotatingSpeed;
@@ -166,13 +117,13 @@ public class GameEngine : MonoBehaviour
         {
             if (renderer.gameObject.tag == Constants.Tags.Frame)
                 renderer.material = FrameMaterial;
-            else if (renderer.gameObject.tag == Constants.Tags.LeftNode)
+            else if (renderer.gameObject.tag == Constants.Tags.NodeLeft)
                 renderer.material = GetRandomMaterial();
-            else if (renderer.gameObject.tag == Constants.Tags.LeftBridge)
+            else if (renderer.gameObject.tag == Constants.Tags.BridgeLeft)
                 renderer.material = ColorMissing;
-            else if (renderer.gameObject.tag == Constants.Tags.RightNode)
+            else if (renderer.gameObject.tag == Constants.Tags.NodeRight)
                 renderer.material = GetRandomMaterial();
-            else if (renderer.gameObject.tag == Constants.Tags.RightBridge)
+            else if (renderer.gameObject.tag == Constants.Tags.BridgeRight)
                 renderer.material = ColorMissing;
         }
         return dnaPair;
@@ -185,13 +136,13 @@ public class GameEngine : MonoBehaviour
             var rightColor = GetRandomMaterial();
             if (renderer.gameObject.tag == Constants.Tags.Frame)
                 renderer.material = FrameMaterial;
-            else if (renderer.gameObject.tag == Constants.Tags.LeftNode)
+            else if (renderer.gameObject.tag == Constants.Tags.NodeLeft)
                 renderer.material = GetRandomMaterial();
-            else if (renderer.gameObject.tag == Constants.Tags.LeftBridge)
+            else if (renderer.gameObject.tag == Constants.Tags.BridgeLeft)
                 renderer.material = ColorMissing;
-            else if (renderer.gameObject.tag == Constants.Tags.RightNode)
+            else if (renderer.gameObject.tag == Constants.Tags.NodeRight)
                 renderer.material = rightColor;
-            else if (renderer.gameObject.tag == Constants.Tags.RightBridge)
+            else if (renderer.gameObject.tag == Constants.Tags.BridgeRight)
                 renderer.material = rightColor;
         }
         return dnaPair;
@@ -204,13 +155,13 @@ public class GameEngine : MonoBehaviour
             var leftColor = GetRandomMaterial();
             if (renderer.gameObject.tag == Constants.Tags.Frame)
                 renderer.material = FrameMaterial;
-            else if (renderer.gameObject.tag == Constants.Tags.LeftNode)
+            else if (renderer.gameObject.tag == Constants.Tags.NodeLeft)
                 renderer.material = leftColor;
-            else if (renderer.gameObject.tag == Constants.Tags.LeftBridge)
+            else if (renderer.gameObject.tag == Constants.Tags.BridgeLeft)
                 renderer.material = leftColor;
-            else if (renderer.gameObject.tag == Constants.Tags.RightNode)
+            else if (renderer.gameObject.tag == Constants.Tags.NodeRight)
                 renderer.material = GetRandomMaterial();
-            else if (renderer.gameObject.tag == Constants.Tags.RightBridge)
+            else if (renderer.gameObject.tag == Constants.Tags.BridgeRight)
                 renderer.material = ColorMissing;
         }
         return dnaPair;
@@ -224,13 +175,13 @@ public class GameEngine : MonoBehaviour
             var rightColor = GetRandomMaterial();
             if (renderer.gameObject.tag == Constants.Tags.Frame)
                 renderer.material = FrameMaterial;
-            else if (renderer.gameObject.tag == Constants.Tags.LeftNode)
+            else if (renderer.gameObject.tag == Constants.Tags.NodeLeft)
                 renderer.material = leftColor;
-            else if (renderer.gameObject.tag == Constants.Tags.LeftBridge)
+            else if (renderer.gameObject.tag == Constants.Tags.BridgeLeft)
                 renderer.material = leftColor;
-            else if (renderer.gameObject.tag == Constants.Tags.RightNode)
+            else if (renderer.gameObject.tag == Constants.Tags.NodeRight)
                 renderer.material = rightColor;
-            else if (renderer.gameObject.tag == Constants.Tags.RightBridge)
+            else if (renderer.gameObject.tag == Constants.Tags.BridgeRight)
                 renderer.material = rightColor;
         }
         return dnaPair;
