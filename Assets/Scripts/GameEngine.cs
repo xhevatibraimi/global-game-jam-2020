@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -22,6 +23,9 @@ public class GameEngine : MonoBehaviour
     public float RotatingSpeed;
     public float YSpeed;
     public float DnaChainInitialPosition;
+    public float ActionRangeDown;
+    public float ActionRangeUp;
+
 
     private List<Material> Colors = new List<Material>();
     private List<DnaPairModel> DnaPairsList = new List<DnaPairModel>();
@@ -36,12 +40,11 @@ public class GameEngine : MonoBehaviour
     {
         HandleInput();
     }
-
-    void HandleInput()
+    private void HandleInput()
     {
+            HandleKickAction(ActionColor.ColorOne, IsChord: false);
         if (Input.GetKeyDown(KeyCode.Z))
         {
-
         }
         if (Input.GetKeyDown(KeyCode.X))
         {
@@ -57,6 +60,41 @@ public class GameEngine : MonoBehaviour
         }
     }
 
+    private void HandleKickAction(ActionColor color, bool IsChord)
+    {
+        var dnaPair = GetElementInActionRange();
+        var renderers = dnaPair.ChildRenderers;
+        var leftBridge = renderers.FirstOrDefault(x => x.gameObject.tag == Constants.Tags.BridgeLeft);
+        var rightBridge = renderers.FirstOrDefault(x => x.gameObject.tag == Constants.Tags.BridgeRight);
+
+        var leftNode = renderers.FirstOrDefault(x => x.gameObject.tag == Constants.Tags.NodeLeft);
+        var rightNode = renderers.FirstOrDefault(x => x.gameObject.tag == Constants.Tags.NodeRight);
+
+        if (IsChord)
+        {
+            //(RendererHasMaterial(leftNode, color) && RendererHasMaterial())
+
+        }
+        else
+        {
+
+        }
+
+    }
+
+    private bool RendererHasMaterial(Renderer renderer, ActionColor color)
+    {
+        return renderer.material == Colors[(int)color - 1];
+    }
+
+    private DnaPairModel GetElementInActionRange()
+    {
+        var element = DnaPairsList.FirstOrDefault(dnaPair => dnaPair.GameObj.transform.position.y > ActionRangeDown
+            && dnaPair.GameObj.transform.position.y < ActionRangeUp);
+        return element;
+    }
+
+    #region Initialize
     private void InitChain()
     {
         // root object
@@ -98,7 +136,6 @@ public class GameEngine : MonoBehaviour
             positionY += YSpeed;
         }
     }
-
     private void InitColors()
     {
         Colors.Add(ColorOne);
@@ -106,13 +143,11 @@ public class GameEngine : MonoBehaviour
         Colors.Add(ColorThree);
         Colors.Add(ColorFour);
     }
-
     private (Material Left, Material Right) GetRandomColorPair()
     {
         var materials = Colors.OrderBy(_ => System.Guid.NewGuid().ToString()).ToList();
         return (materials[0], materials[1]);
     }
-
     void ConfigurePair(DnaPairMode pairMode, DnaPairModel pair)
     {
         switch (pairMode)
@@ -131,7 +166,6 @@ public class GameEngine : MonoBehaviour
                 break;
         }
     }
-
     private void ConfigureBothMissingDnaPair(DnaPairModel pair)
     {
         var (leftColor, rightColor) = GetRandomColorPair();
@@ -209,7 +243,6 @@ public class GameEngine : MonoBehaviour
                 renderer.material = rightColor;
         }
     }
-
     private void GenerateObjects(GameObject go, Transform parent, int count)
     {
         DnaPairsList = new List<DnaPairModel>();
@@ -222,4 +255,5 @@ public class GameEngine : MonoBehaviour
             DnaPairsList.Add(dnaPair);
         }
     }
+    #endregion
 }
