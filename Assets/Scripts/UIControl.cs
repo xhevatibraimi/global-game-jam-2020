@@ -12,6 +12,11 @@ public class UIControl : MonoBehaviour
     public GameObject GameOver;
 
     public GameObject UIBlocker;
+
+    public GameObject ControlPanel;
+
+    public GameObject ActionArea;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -30,6 +35,8 @@ public class UIControl : MonoBehaviour
         Score.SetActive(true);
         GameOver.SetActive(false);
         UIBlocker.SetActive(false);
+        ControlPanel.SetActive(true);
+        ActionArea.SetActive(true);
         GameEngine.GameState = GameState.Started;
         // game start here
     }
