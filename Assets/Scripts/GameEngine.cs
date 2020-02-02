@@ -10,13 +10,16 @@ public class GameEngine : MonoBehaviour
     public GameObject RootObject;
     public GameObject DnaChain;
     public GameObject DnaPair;
+
     public Material ColorOne;
     public Material ColorTwo;
     public Material ColorThree;
     public Material ColorFour;
 
-    public Material ColorMissing;
+    public Material FrameMaterial;
     public Material NodeMaterial;
+    public Material ColorMissing;
+
     public int NumberOfDnaPairs = 1;
     public float RotatingSpeed;
     public float YSpeed;
@@ -49,7 +52,7 @@ public class GameEngine : MonoBehaviour
         while (counter < NumberOfDnaPairs)
         {
             isOddDnaPairPosition = !isOddDnaPairPosition;
-            var dnaPair = InstantiateDnaPair();
+            var dnaPair = Instantiate(DnaPair);
             dnaPair.transform.localPosition = new Vector3(0, positionY, 0);
             dnaPair.transform.localRotation = Quaternion.Euler(0, rotationY, 0);
             dnaPair.transform.parent = dnaChainObject.transform;
@@ -58,8 +61,8 @@ public class GameEngine : MonoBehaviour
 
             foreach (var renderer in childRenderers)
             {
-                bool isLeftBridge = renderer.gameObject.tag == "BridgeLeft";
-                bool isRightBridge = renderer.gameObject.tag == "BridgeRight";
+                bool isLeftBridge = renderer.gameObject.tag == Constants.Tags.LeftBridge;
+                bool isRightBridge = renderer.gameObject.tag == Constants.Tags.RightBridge;
 
                 // isBridge
                 if (isLeftBridge || isRightBridge)
@@ -104,7 +107,7 @@ public class GameEngine : MonoBehaviour
                     // frame
                     if (isFrame)
                     {
-                        renderer.material = ColorFour;
+                        renderer.material = FrameMaterial;
                     }
                     else if (isNode)
                     {
@@ -139,11 +142,97 @@ public class GameEngine : MonoBehaviour
         return material;
     }
 
-    private GameObject InstantiateDnaPair()
+    private GameObject InstantiateDnaPair(DnaPairMode pairMode)
     {
         var dnaPair = Instantiate(DnaPair);
 
+        switch (pairMode)
+        {
+            case DnaPairMode.BothMissing:
+                return GenerateBothMissingDnaPair();
+            case DnaPairMode.LeftMissing:
+                return GenerateLeftMissingDnaPair();
+            case DnaPairMode.RightMissing:
+                return GenerateRightMissingDnaPair();
+            default:
+                return GenerateDefaultDnaPair();
+        }
+    }
 
+    private GameObject GenerateBothMissingDnaPair()
+    {
+        var dnaPair = Instantiate(DnaPair);
+        foreach (var renderer in dnaPair.GetComponentsInChildren<Renderer>())
+        {
+            if (renderer.gameObject.tag == Constants.Tags.Frame)
+                renderer.material = FrameMaterial;
+            else if (renderer.gameObject.tag == Constants.Tags.LeftNode)
+                renderer.material = GetRandomMaterial();
+            else if (renderer.gameObject.tag == Constants.Tags.LeftBridge)
+                renderer.material = ColorMissing;
+            else if (renderer.gameObject.tag == Constants.Tags.RightNode)
+                renderer.material = GetRandomMaterial();
+            else if (renderer.gameObject.tag == Constants.Tags.RightBridge)
+                renderer.material = ColorMissing;
+        }
+        return dnaPair;
+    }
+    private GameObject GenerateLeftMissingDnaPair()
+    {
+        var dnaPair = Instantiate(DnaPair);
+        foreach (var renderer in dnaPair.GetComponentsInChildren<Renderer>())
+        {
+            var rightColor = GetRandomMaterial();
+            if (renderer.gameObject.tag == Constants.Tags.Frame)
+                renderer.material = FrameMaterial;
+            else if (renderer.gameObject.tag == Constants.Tags.LeftNode)
+                renderer.material = GetRandomMaterial();
+            else if (renderer.gameObject.tag == Constants.Tags.LeftBridge)
+                renderer.material = ColorMissing;
+            else if (renderer.gameObject.tag == Constants.Tags.RightNode)
+                renderer.material = rightColor;
+            else if (renderer.gameObject.tag == Constants.Tags.RightBridge)
+                renderer.material = rightColor;
+        }
+        return dnaPair;
+    }
+    private GameObject GenerateRightMissingDnaPair()
+    {
+        var dnaPair = Instantiate(DnaPair);
+        foreach (var renderer in dnaPair.GetComponentsInChildren<Renderer>())
+        {
+            var leftColor = GetRandomMaterial();
+            if (renderer.gameObject.tag == Constants.Tags.Frame)
+                renderer.material = FrameMaterial;
+            else if (renderer.gameObject.tag == Constants.Tags.LeftNode)
+                renderer.material = leftColor;
+            else if (renderer.gameObject.tag == Constants.Tags.LeftBridge)
+                renderer.material = leftColor;
+            else if (renderer.gameObject.tag == Constants.Tags.RightNode)
+                renderer.material = GetRandomMaterial();
+            else if (renderer.gameObject.tag == Constants.Tags.RightBridge)
+                renderer.material = ColorMissing;
+        }
+        return dnaPair;
+    }
+    private GameObject GenerateDefaultDnaPair()
+    {
+        var dnaPair = Instantiate(DnaPair);
+        foreach (var renderer in dnaPair.GetComponentsInChildren<Renderer>())
+        {
+            var leftColor = GetRandomMaterial();
+            var rightColor = GetRandomMaterial();
+            if (renderer.gameObject.tag == Constants.Tags.Frame)
+                renderer.material = FrameMaterial;
+            else if (renderer.gameObject.tag == Constants.Tags.LeftNode)
+                renderer.material = leftColor;
+            else if (renderer.gameObject.tag == Constants.Tags.LeftBridge)
+                renderer.material = leftColor;
+            else if (renderer.gameObject.tag == Constants.Tags.RightNode)
+                renderer.material = rightColor;
+            else if (renderer.gameObject.tag == Constants.Tags.RightBridge)
+                renderer.material = rightColor;
+        }
         return dnaPair;
     }
 }

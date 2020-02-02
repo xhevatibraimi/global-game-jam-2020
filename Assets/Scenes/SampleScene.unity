@@ -175,8 +175,9 @@ MonoBehaviour:
   ColorTwo: {fileID: 2100000, guid: 17a06ea780009a747a05957bd80c9b74, type: 2}
   ColorThree: {fileID: 2100000, guid: cb1653b4e5c73d5448259612c30dc74b, type: 2}
   ColorFour: {fileID: 2100000, guid: 2db2e34fcffcb4846850c0aaa2782c4a, type: 2}
-  ColorMissing: {fileID: 2100000, guid: 6cad08df147ab164c9907f5804842ed1, type: 2}
+  FrameMaterial: {fileID: 2100000, guid: bfbf65a81c3a4444282783625f2e5732, type: 2}
   NodeMaterial: {fileID: 2100000, guid: 65ff21c1f71a39b408e469d5b9b149d1, type: 2}
+  ColorMissing: {fileID: 2100000, guid: 6cad08df147ab164c9907f5804842ed1, type: 2}
   NumberOfDnaPairs: 64
   RotatingSpeed: 15
   YSpeed: 4
