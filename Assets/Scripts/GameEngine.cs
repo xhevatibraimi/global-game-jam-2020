@@ -13,7 +13,7 @@ public class GameEngine : MonoBehaviour
     public GameObject RootObject;
     public GameObject DnaChain;
     public GameObject DnaPair;
-
+    public GameObject Menu;
     public Material ColorOne;
     public Material ColorTwo;
     public Material ColorThree;
@@ -35,6 +35,8 @@ public class GameEngine : MonoBehaviour
     private List<DnaPairModel> DnaPairsList = new List<DnaPairModel>();
     private static System.Random random = new System.Random();
     private int GameScore = 0;
+    public static GameState GameState = GameState.NotStarted;
+
     void Start()
     {
         InitColors();
@@ -43,12 +45,16 @@ public class GameEngine : MonoBehaviour
 
     private void Update()
     {
-        HandleInput();
+        if (GameState == GameState.Started)
+        {
+            HandleInput();
+        }
     }
 
     #region Handle Kick Action
     private void HandleInput()
     {
+
         if (HasInput())
         {
             // check for clicks

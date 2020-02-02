@@ -12,12 +12,15 @@ public class FallingObjectController : MonoBehaviour
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
-        rb.velocity = Vector3.down * YSpeed * FallingSpeed;
         trans = GetComponent<Transform>();
     }
 
     private void Update()
     {
-        trans.Rotate(0, RotatingSpeed * Time.deltaTime * FallingSpeed, 0);
+        if (GameEngine.GameState == GameState.Started)
+        {
+            rb.velocity = Vector3.down * YSpeed * FallingSpeed;
+            trans.Rotate(0, RotatingSpeed * Time.deltaTime * FallingSpeed, 0);
+        }
     }
 }

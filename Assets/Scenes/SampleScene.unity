@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
+  m_IndirectSpecularColor: {r: 0.4465782, g: 0.49641252, b: 0.5748167, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -121,6 +121,12 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &29355512 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2760393413163445193, guid: 48747411350c2fb4cbb8797196f77aff,
+    type: 3}
+  m_PrefabInstance: {fileID: 44928582}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &44928582
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -128,6 +134,36 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2760393413163445195, guid: 48747411350c2fb4cbb8797196f77aff,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2760393413163445195, guid: 48747411350c2fb4cbb8797196f77aff,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2760393413163445195, guid: 48747411350c2fb4cbb8797196f77aff,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2760393413163445195, guid: 48747411350c2fb4cbb8797196f77aff,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 356943939}
+    - target: {fileID: 2760393413163445195, guid: 48747411350c2fb4cbb8797196f77aff,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: StartGame
+      objectReference: {fileID: 0}
+    - target: {fileID: 2760393413163445195, guid: 48747411350c2fb4cbb8797196f77aff,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 2760393413904034415, guid: 48747411350c2fb4cbb8797196f77aff,
         type: 3}
       propertyPath: m_FontData.m_Font
@@ -532,13 +568,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4cfca3659315f3241abb8f62ec36d3e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  UICanvas: {fileID: 824814276}
+  UICanvas: {fileID: 0}
   FallingObject: {fileID: 8350430007494456706, guid: 62342e99c54a0d2419182a21562b7c1c,
     type: 3}
   RootObject: {fileID: 355548482}
   DnaChain: {fileID: 2608439993434919283, guid: 4379caabba0fda041a456a104ebaa4a1,
     type: 3}
   DnaPair: {fileID: 1132590227607621666, guid: cd3de1cae9fd8ad48925f6eeefdcaa5b, type: 3}
+  Menu: {fileID: 29355512}
   ColorOne: {fileID: 2100000, guid: 4b619bcc177da7c49928dffa3fb12f10, type: 2}
   ColorTwo: {fileID: 2100000, guid: 17a06ea780009a747a05957bd80c9b74, type: 2}
   ColorThree: {fileID: 2100000, guid: cb1653b4e5c73d5448259612c30dc74b, type: 2}
@@ -830,12 +867,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
---- !u!1 &824814276 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2760393414209442919, guid: 48747411350c2fb4cbb8797196f77aff,
-    type: 3}
-  m_PrefabInstance: {fileID: 44928582}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0

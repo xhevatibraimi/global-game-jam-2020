@@ -30,6 +30,7 @@ public class UIControl : MonoBehaviour
         Score.SetActive(true);
         GameOver.SetActive(false);
         UIBlocker.SetActive(false);
+        GameEngine.GameState = GameState.Started;
         // game start here
     }
 
