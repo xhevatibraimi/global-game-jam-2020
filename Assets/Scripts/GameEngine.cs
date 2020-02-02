@@ -55,7 +55,7 @@ public class GameEngine : MonoBehaviour
         var rotationY = 0.0f;
         var positionY = 0.0f;
 
-        var gameObjects = GenerateObjects(DnaPair, dnaChainObject.transform).Take(NumberOfDnaPairs).ToList();
+        var gameObjects = GenerateObjects(DnaPair, dnaChainObject.transform, NumberOfDnaPairs);
 
         foreach (var pair in gameObjects)
         {
@@ -66,7 +66,7 @@ public class GameEngine : MonoBehaviour
             }
             else
             {
-                var random1to3 = random.Next(0, 3);
+                var random1to3 = random.Next(1, 4);
                 dnaPair = ConfigurePair((DnaPairMode)random1to3, pair);
             }
 
@@ -88,16 +88,10 @@ public class GameEngine : MonoBehaviour
         Colors.Add(ColorFour);
     }
 
-    private Material GetRandomMaterial()
+    private (Material Left, Material Right) GetRandomColorPair()
     {
-        Material material = null;
-        do
-        {
-            var randomNumber = random.Next(0, 4);
-            material = Colors[randomNumber];
-        } while (material == previousMaterial);
-        previousMaterial = material;
-        return material;
+        var materials = Colors.OrderBy(_ => System.Guid.NewGuid().ToString()).ToList();
+        return (materials[0], materials[1]);
     }
 
     private GameObject ConfigurePair(DnaPairMode pairMode, GameObject pair)
@@ -117,16 +111,19 @@ public class GameEngine : MonoBehaviour
 
     private GameObject ConfigureBothMissingDnaPair(GameObject pair)
     {
+        var (leftColor, rightColor) = GetRandomColorPair();
         foreach (var renderer in pair.GetComponentsInChildren<Renderer>())
         {
             if (renderer.gameObject.tag == Constants.Tags.Frame)
-                renderer.material = ColorMissing;
+                renderer.material = FrameMaterial;
+
             else if (renderer.gameObject.tag == Constants.Tags.NodeLeft)
-                renderer.material = ColorMissing;
+                renderer.material = leftColor;
             else if (renderer.gameObject.tag == Constants.Tags.BridgeLeft)
                 renderer.material = ColorMissing;
+
             else if (renderer.gameObject.tag == Constants.Tags.NodeRight)
-                renderer.material = ColorMissing;
+                renderer.material = rightColor;
             else if (renderer.gameObject.tag == Constants.Tags.BridgeRight)
                 renderer.material = ColorMissing;
         }
@@ -134,35 +131,40 @@ public class GameEngine : MonoBehaviour
     }
     private GameObject ConfigureLeftMissingDnaPair(GameObject pair)
     {
+        var (leftColor, rightColor) = GetRandomColorPair();
         foreach (var renderer in pair.GetComponentsInChildren<Renderer>())
         {
-            var rightColor = GetRandomMaterial();
+
             if (renderer.gameObject.tag == Constants.Tags.Frame)
-                renderer.material = ColorMissing;
+                renderer.material = FrameMaterial;
+
             else if (renderer.gameObject.tag == Constants.Tags.NodeLeft)
-                renderer.material = ColorMissing;
+                renderer.material = leftColor;
             else if (renderer.gameObject.tag == Constants.Tags.BridgeLeft)
                 renderer.material = ColorMissing;
+
             else if (renderer.gameObject.tag == Constants.Tags.NodeRight)
-                renderer.material = ColorMissing;
+                renderer.material = rightColor;
             else if (renderer.gameObject.tag == Constants.Tags.BridgeRight)
-                renderer.material = ColorMissing;
+                renderer.material = rightColor;
         }
         return pair;
     }
     private GameObject ConfigureRightMissingDnaPair(GameObject pair)
     {
+        var (leftColor, rightColor) = GetRandomColorPair();
         foreach (var renderer in pair.GetComponentsInChildren<Renderer>())
         {
-            var leftColor = GetRandomMaterial();
             if (renderer.gameObject.tag == Constants.Tags.Frame)
-                renderer.material = ColorMissing;
+                renderer.material = FrameMaterial;
+
             else if (renderer.gameObject.tag == Constants.Tags.NodeLeft)
-                renderer.material = ColorMissing;
+                renderer.material = leftColor;
             else if (renderer.gameObject.tag == Constants.Tags.BridgeLeft)
-                renderer.material = ColorMissing;
+                renderer.material = leftColor;
+
             else if (renderer.gameObject.tag == Constants.Tags.NodeRight)
-                renderer.material = ColorMissing;
+                renderer.material = rightColor;
             else if (renderer.gameObject.tag == Constants.Tags.BridgeRight)
                 renderer.material = ColorMissing;
         }
@@ -170,31 +172,34 @@ public class GameEngine : MonoBehaviour
     }
     private GameObject ConfigureDefaultDnaPair(GameObject pair)
     {
+        var (leftColor, rightColor) = GetRandomColorPair();
         foreach (var renderer in pair.GetComponentsInChildren<Renderer>())
         {
-            var leftColor = GetRandomMaterial();
-            var rightColor = GetRandomMaterial();
             if (renderer.gameObject.tag == Constants.Tags.Frame)
-                renderer.material = ColorMissing;
+                renderer.material = FrameMaterial;
+
             else if (renderer.gameObject.tag == Constants.Tags.NodeLeft)
                 renderer.material = leftColor;
             else if (renderer.gameObject.tag == Constants.Tags.BridgeLeft)
-                renderer.material = ColorMissing;
+                renderer.material = leftColor;
+
             else if (renderer.gameObject.tag == Constants.Tags.NodeRight)
-                renderer.material = ColorMissing;
+                renderer.material = rightColor;
             else if (renderer.gameObject.tag == Constants.Tags.BridgeRight)
-                renderer.material = ColorMissing;
+                renderer.material = rightColor;
         }
         return pair;
     }
 
-    static IEnumerable<GameObject> GenerateObjects(GameObject go, Transform parent)
+    static IEnumerable<GameObject> GenerateObjects(GameObject go, Transform parent, int count)
     {
-        while (true)
+        var list = new List<GameObject>();
+        for (int i = 0; i < count; i++)
         {
             var obj = Instantiate(go);
             obj.transform.parent = parent;
-            yield return obj;
+            list.Add(obj);
         }
+        return list;
     }
 }
