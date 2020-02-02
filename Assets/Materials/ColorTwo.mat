@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: ColorTwo
-  m_Shader: {fileID: -6465566751694194690, guid: cda44034eb470b74888447ad21466589,
+  m_Shader: {fileID: -6465566751694194690, guid: 66065b012cbf76644b5e5e5e1a3a0781,
     type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
@@ -74,5 +74,7 @@ Material:
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:
+    - Color_B2A49430: {r: 1, g: 0, b: 0.029372692, a: 0}
+    - Color_C749CC92: {r: 0.7176471, g: 0.21332617, b: 0.08627451, a: 0}
     - _Color: {r: 0, g: 0.99607843, b: 0.7921569, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
