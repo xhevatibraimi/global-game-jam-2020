@@ -76,7 +76,7 @@ public class GameEngine : MonoBehaviour
                         var randomNumber1to3 = random.Next(0, 3);
 
                         // left missing
-                        if (randomNumber == 1)
+                        if (randomNumber == 0)
                         {
                             renderer.material = GetRandomMaterial();
                             if (isLeftBridge)
@@ -85,7 +85,7 @@ public class GameEngine : MonoBehaviour
                             }
                         }
                         // right missing
-                        else if (randomNumber == 2)
+                        else if (randomNumber == 1)
                         {
                             renderer.material = GetRandomMaterial();
                             if (isRightBridge)
@@ -94,7 +94,7 @@ public class GameEngine : MonoBehaviour
                             }
                         }
                         // both missing
-                        else if (randomNumber == 3)
+                        else if (randomNumber == 2)
                         {
                             renderer.material = GetRandomMaterial();
                             renderer.material.color = new Color(renderer.material.color.r, renderer.material.color.g, renderer.material.color.b, 127);
