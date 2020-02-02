@@ -10,11 +10,12 @@ public class GameEngine : MonoBehaviour
     public GameObject RootObject;
     public GameObject DnaChain;
     public GameObject DnaPair;
-    public Material RedMaterial;
-    public Material GreenMaterial;
-    public Material BlueMaterial;
-    public Material YellowMaterial;
-    public Material FrameMaterial;
+    public Material ColorOne;
+    public Material ColorTwo;
+    public Material ColorThree;
+    public Material ColorFour;
+
+    public Material ColorMissing;
     public Material NodeMaterial;
     public int NumberOfDnaPairs = 1;
     public float RotatingSpeed;
@@ -22,23 +23,19 @@ public class GameEngine : MonoBehaviour
     public float DnaChainInitialPosition;
 
 
-    private List<Material> Materials = new List<Material>();
+    private List<Material> Colors = new List<Material>();
     private Material previousMaterial = null;
     private System.Random random = new System.Random();
     void Start()
     {
+        InitColors();
         InitChain();
     }
 
-
     private void InitChain()
     {
-        Materials.Add(RedMaterial);
-        Materials.Add(GreenMaterial);
-        Materials.Add(BlueMaterial);
-        Materials.Add(YellowMaterial);
         var randomNumber = random.Next(0, 4);
-        previousMaterial = Materials[randomNumber];
+        previousMaterial = Colors[randomNumber];
 
         var rootObject = Instantiate(RootObject);
         var fallingObject = Instantiate(FallingObject);
@@ -73,34 +70,31 @@ public class GameEngine : MonoBehaviour
                     }
                     else
                     {
-                        #region Create Variation
+                        // create missing
                         var randomNumber1to3 = random.Next(0, 3);
 
                         // left missing
                         if (randomNumber == 0)
                         {
-                            renderer.material = GetRandomMaterial();
+                            renderer.material = ColorMissing;
                             if (isLeftBridge)
-                            {
-                                renderer.material.color = new Color(renderer.material.color.r, renderer.material.color.g, renderer.material.color.b, 127);
-                            }
+                                renderer.material = ColorMissing;
+                            else
+                                renderer.material = GetRandomMaterial();
                         }
                         // right missing
                         else if (randomNumber == 1)
                         {
-                            renderer.material = GetRandomMaterial();
                             if (isRightBridge)
-                            {
-                                renderer.material.color = new Color(renderer.material.color.r, renderer.material.color.g, renderer.material.color.b, 127);
-                            }
+                                renderer.material = ColorMissing;
+                            else
+                                renderer.material = GetRandomMaterial();
                         }
                         // both missing
                         else if (randomNumber == 2)
                         {
-                            renderer.material = GetRandomMaterial();
-                            renderer.material.color = new Color(renderer.material.color.r, renderer.material.color.g, renderer.material.color.b, 127);
+                            renderer.material = ColorMissing;
                         }
-                        #endregion
                     }
                 }
                 else
@@ -110,7 +104,7 @@ public class GameEngine : MonoBehaviour
                     // frame
                     if (isFrame)
                     {
-                        renderer.material = FrameMaterial;
+                        renderer.material = ColorFour;
                     }
                     else if (isNode)
                     {
@@ -125,13 +119,21 @@ public class GameEngine : MonoBehaviour
         }
     }
 
+    private void InitColors()
+    {
+        Colors.Add(ColorOne);
+        Colors.Add(ColorTwo);
+        Colors.Add(ColorThree);
+        Colors.Add(ColorFour);
+    }
+
     private Material GetRandomMaterial()
     {
         Material material = null;
         do
         {
             var randomNumber = random.Next(0, 4);
-            material = Materials[randomNumber];
+            material = Colors[randomNumber];
         } while (material == previousMaterial);
         previousMaterial = material;
         return material;
