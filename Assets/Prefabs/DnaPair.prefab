@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1132590227565720030}
   m_Layer: 0
   m_Name: NodeSphereRight
-  m_TagString: Untagged
+  m_TagString: node
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -107,7 +107,7 @@ GameObject:
   - component: {fileID: 1132590227575051537}
   m_Layer: 0
   m_Name: FrameCylindeRight
-  m_TagString: Untagged
+  m_TagString: Frame
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -201,7 +201,7 @@ GameObject:
   - component: {fileID: 1132590227577466095}
   m_Layer: 0
   m_Name: FrameCylinderLeft
-  m_TagString: Untagged
+  m_TagString: Frame
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -425,7 +425,7 @@ GameObject:
   - component: {fileID: 1132590228394304545}
   m_Layer: 0
   m_Name: NodeSphereLeft
-  m_TagString: Untagged
+  m_TagString: node
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

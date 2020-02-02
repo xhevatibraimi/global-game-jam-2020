@@ -15,6 +15,7 @@ public class GameEngine : MonoBehaviour
     public Material BlueMaterial;
     public Material YellowMaterial;
     public Material FrameMaterial;
+    public Material NodeMaterial;
     public int NumberOfDnaPairs = 1;
     public float RotatingSpeed;
     public float YSpeed;
@@ -60,8 +61,8 @@ public class GameEngine : MonoBehaviour
 
             foreach (var renderer in childRenderers)
             {
-                bool isLeftBridge = renderer.gameObject.tag =="BridgeLeft";
-                bool isRightBridge = renderer.gameObject.tag =="BridgeRight";
+                bool isLeftBridge = renderer.gameObject.tag == "BridgeLeft";
+                bool isRightBridge = renderer.gameObject.tag == "BridgeRight";
 
                 // isBridge
                 if (isLeftBridge || isRightBridge)
@@ -104,8 +105,17 @@ public class GameEngine : MonoBehaviour
                 }
                 else
                 {
+                    bool isFrame = renderer.gameObject.tag == "Frame";
+                    bool isNode = renderer.gameObject.tag == "node";
                     // frame
-                    renderer.material = FrameMaterial;
+                    if (isFrame)
+                    {
+                        renderer.material = FrameMaterial;
+                    }
+                    else if (isNode)
+                    {
+                        renderer.material = NodeMaterial;
+                    }
                 }
             }
 

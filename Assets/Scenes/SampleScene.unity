@@ -176,6 +176,7 @@ MonoBehaviour:
   BlueMaterial: {fileID: 2100000, guid: 4b619bcc177da7c49928dffa3fb12f10, type: 2}
   YellowMaterial: {fileID: 2100000, guid: 2db2e34fcffcb4846850c0aaa2782c4a, type: 2}
   FrameMaterial: {fileID: 2100000, guid: bfbf65a81c3a4444282783625f2e5732, type: 2}
+  NodeMaterial: {fileID: 2100000, guid: 65ff21c1f71a39b408e469d5b9b149d1, type: 2}
   NumberOfDnaPairs: 64
   RotatingSpeed: 15
   YSpeed: 4

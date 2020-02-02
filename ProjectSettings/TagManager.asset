@@ -4,7 +4,11 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Bridge
+  - BridgeLeft
+  - BridgeRight
+  - Frame
+  - Node
+  - node
   layers:
   - Default
   - TransparentFX
