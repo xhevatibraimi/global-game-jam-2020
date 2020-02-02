@@ -90,11 +90,11 @@ public class GameEngine : MonoBehaviour
                 return;
 
             // MISSING
-            var clickedColors = GetClickedColors(input);
+            var clickedColorsIndexes = GetClickedColors(input);
             if (dnaPair.LeftIsMissing && dnaPair.RightIsMissing)
             {
                 // both missing
-                if (clickedColors.Contains(Colors[dnaPair.MissingColors[0]].color) && clickedColors.Contains(Colors[dnaPair.MissingColors[1]].color) && clickedColors.Count == 2)
+                if (clickedColorsIndexes.Contains(dnaPair.MissingColors[0]) && clickedColorsIndexes.Contains(dnaPair.MissingColors[1]) && clickedColorsIndexes.Count == 2)
                     IncrementScore(2);
                 else
                     DecrementScore();
@@ -102,7 +102,7 @@ public class GameEngine : MonoBehaviour
             else if (dnaPair.LeftIsMissing)
             {
                 // left missing
-                if (clickedColors.Contains(Colors[dnaPair.MissingColors[0]].color) && clickedColors.Count == 1)
+                if (clickedColorsIndexes.Contains(dnaPair.MissingColors[0]) && clickedColorsIndexes.Count == 1)
                     IncrementScore(1);
                 else
                     DecrementScore();
@@ -110,7 +110,7 @@ public class GameEngine : MonoBehaviour
             else if (dnaPair.RightIsMissing)
             {
                 // right missing
-                if (clickedColors.Contains(Colors[dnaPair.MissingColors[0]].color) && clickedColors.Count == 1)
+                if (clickedColorsIndexes.Contains(dnaPair.MissingColors[0]) && clickedColorsIndexes.Count == 1)
                     IncrementScore(1);
                 else
                     DecrementScore();
@@ -120,7 +120,7 @@ public class GameEngine : MonoBehaviour
         else
         {
             //NOT MISSING 
-            Debug.Log("no missing");
+            DecrementScore();
         }
     }
     private void DecrementScore()
@@ -139,14 +139,14 @@ public class GameEngine : MonoBehaviour
         Debug.ClearDeveloperConsole();
         Debug.Log(GameScore);
     }
-    private List<Color> GetClickedColors(bool[] input)
+    private List<int> GetClickedColors(bool[] input)
     {
-        var colors = new List<Color>();
+        var colors = new List<int>();
         for (int i = 0; i < Colors.Count; i++)
         {
             if (input[i])
             {
-                colors.Add(Colors[i].color);
+                colors.Add(i);
             }
         }
         return colors;
@@ -215,11 +215,11 @@ public class GameEngine : MonoBehaviour
         int rightColorIndex = 0;
         for (int i = 0; i < Colors.Count; i++)
         {
-            if (materials[0].color == Colors[i].color)
+            if (materials[0].shader == Colors[i].shader)
             {
                 leftColorIndex = i;
             }
-            if (materials[1].color == Colors[i].color)
+            if (materials[1].shader == Colors[i].shader)
             {
                 leftColorIndex = i;
             }
