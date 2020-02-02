@@ -24,6 +24,7 @@ public class GameEngine : MonoBehaviour
     public float DnaChainInitialPosition;
 
     private List<Material> Colors = new List<Material>();
+    private List<DnaPairModel> DnaPairsList = new List<DnaPairModel>();
     private static System.Random random = new System.Random();
     void Start()
     {
@@ -74,24 +75,23 @@ public class GameEngine : MonoBehaviour
         var rotationY = 0.0f;
         var positionY = 0.0f;
 
-        var gameObjects = GenerateObjects(DnaPair, dnaChainObject.transform, NumberOfDnaPairs);
+        GenerateObjects(DnaPair, dnaChainObject.transform, NumberOfDnaPairs);
 
-        foreach (var pair in gameObjects)
+        foreach (var dnaPair in DnaPairsList)
         {
-            GameObject dnaPair = null;
             if (counter % 2 == 0)
             {
-                dnaPair = ConfigurePair(DnaPairMode.Default, pair);
+                ConfigurePair(DnaPairMode.Default, dnaPair);
             }
             else
             {
                 var random1to3 = random.Next(1, 4);
-                dnaPair = ConfigurePair((DnaPairMode)random1to3, pair);
+                ConfigurePair((DnaPairMode)random1to3, dnaPair);
             }
 
-            dnaPair.transform.localPosition = new Vector3(0, positionY, 0);
-            dnaPair.transform.localRotation = Quaternion.Euler(0, rotationY, 0);
-            dnaPair.transform.parent = dnaChainObject.transform;
+            dnaPair.GameObj.transform.localPosition = new Vector3(0, positionY, 0);
+            dnaPair.GameObj.transform.localRotation = Quaternion.Euler(0, rotationY, 0);
+            dnaPair.GameObj.transform.parent = dnaChainObject.transform;
 
             counter++;
             rotationY -= RotatingSpeed;
@@ -113,25 +113,29 @@ public class GameEngine : MonoBehaviour
         return (materials[0], materials[1]);
     }
 
-    private GameObject ConfigurePair(DnaPairMode pairMode, GameObject pair)
+    void ConfigurePair(DnaPairMode pairMode, DnaPairModel pair)
     {
         switch (pairMode)
         {
             case DnaPairMode.BothMissing:
-                return ConfigureBothMissingDnaPair(pair);
+                ConfigureBothMissingDnaPair(pair);
+                break;
             case DnaPairMode.LeftMissing:
-                return ConfigureLeftMissingDnaPair(pair);
+                ConfigureLeftMissingDnaPair(pair);
+                break;
             case DnaPairMode.RightMissing:
-                return ConfigureRightMissingDnaPair(pair);
+                ConfigureRightMissingDnaPair(pair);
+                break;
             default:
-                return ConfigureDefaultDnaPair(pair);
+                ConfigureDefaultDnaPair(pair);
+                break;
         }
     }
 
-    private GameObject ConfigureBothMissingDnaPair(GameObject pair)
+    private void ConfigureBothMissingDnaPair(DnaPairModel pair)
     {
         var (leftColor, rightColor) = GetRandomColorPair();
-        foreach (var renderer in pair.GetComponentsInChildren<Renderer>())
+        foreach (var renderer in pair.ChildRenderers)
         {
             if (renderer.gameObject.tag == Constants.Tags.Frame)
                 renderer.material = FrameMaterial;
@@ -146,12 +150,11 @@ public class GameEngine : MonoBehaviour
             else if (renderer.gameObject.tag == Constants.Tags.BridgeRight)
                 renderer.material = ColorMissing;
         }
-        return pair;
     }
-    private GameObject ConfigureLeftMissingDnaPair(GameObject pair)
+    private void ConfigureLeftMissingDnaPair(DnaPairModel pair)
     {
         var (leftColor, rightColor) = GetRandomColorPair();
-        foreach (var renderer in pair.GetComponentsInChildren<Renderer>())
+        foreach (var renderer in pair.ChildRenderers)
         {
 
             if (renderer.gameObject.tag == Constants.Tags.Frame)
@@ -167,12 +170,11 @@ public class GameEngine : MonoBehaviour
             else if (renderer.gameObject.tag == Constants.Tags.BridgeRight)
                 renderer.material = rightColor;
         }
-        return pair;
     }
-    private GameObject ConfigureRightMissingDnaPair(GameObject pair)
+    private void ConfigureRightMissingDnaPair(DnaPairModel pair)
     {
         var (leftColor, rightColor) = GetRandomColorPair();
-        foreach (var renderer in pair.GetComponentsInChildren<Renderer>())
+        foreach (var renderer in pair.ChildRenderers)
         {
             if (renderer.gameObject.tag == Constants.Tags.Frame)
                 renderer.material = FrameMaterial;
@@ -187,12 +189,11 @@ public class GameEngine : MonoBehaviour
             else if (renderer.gameObject.tag == Constants.Tags.BridgeRight)
                 renderer.material = ColorMissing;
         }
-        return pair;
     }
-    private GameObject ConfigureDefaultDnaPair(GameObject pair)
+    private void ConfigureDefaultDnaPair(DnaPairModel pair)
     {
         var (leftColor, rightColor) = GetRandomColorPair();
-        foreach (var renderer in pair.GetComponentsInChildren<Renderer>())
+        foreach (var renderer in pair.ChildRenderers)
         {
             if (renderer.gameObject.tag == Constants.Tags.Frame)
                 renderer.material = FrameMaterial;
@@ -207,18 +208,18 @@ public class GameEngine : MonoBehaviour
             else if (renderer.gameObject.tag == Constants.Tags.BridgeRight)
                 renderer.material = rightColor;
         }
-        return pair;
     }
 
-    static IEnumerable<GameObject> GenerateObjects(GameObject go, Transform parent, int count)
+    private void GenerateObjects(GameObject go, Transform parent, int count)
     {
-        var list = new List<GameObject>();
+        DnaPairsList = new List<DnaPairModel>();
         for (int i = 0; i < count; i++)
         {
-            var obj = Instantiate(go);
-            obj.transform.parent = parent;
-            list.Add(obj);
+            var dnaPair = new DnaPairModel();
+            dnaPair.GameObj = Instantiate(go);
+            dnaPair.GameObj.transform.parent = parent;
+            dnaPair.ChildRenderers = dnaPair.GameObj.GetComponentsInChildren<Renderer>().ToList();
+            DnaPairsList.Add(dnaPair);
         }
-        return list;
     }
 }
