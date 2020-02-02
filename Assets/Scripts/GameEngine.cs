@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class GameEngine : MonoBehaviour
 {
-    //static GameEngine Instance = new GameEngine();
     public GameObject FallingObject;
     public GameObject RootObject;
     public GameObject DnaChain;
@@ -24,9 +23,7 @@ public class GameEngine : MonoBehaviour
     public float YSpeed;
     public float DnaChainInitialPosition;
 
-
     private List<Material> Colors = new List<Material>();
-    private Material previousMaterial = null;
     private static System.Random random = new System.Random();
     void Start()
     {
@@ -34,11 +31,33 @@ public class GameEngine : MonoBehaviour
         InitChain();
     }
 
+    private void Update()
+    {
+        HandleInput();
+    }
+
+    void HandleInput()
+    {
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+
+        }
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+
+        }
+        if (Input.GetKeyDown(KeyCode.N))
+        {
+
+        }
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+
+        }
+    }
+
     private void InitChain()
     {
-        var randomNumber = random.Next(0, 4);
-        previousMaterial = Colors[randomNumber];
-
         // root object
         var rootObject = Instantiate(RootObject);
 
