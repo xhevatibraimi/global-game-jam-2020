@@ -171,7 +171,15 @@ MonoBehaviour:
   DnaChain: {fileID: 2608439993434919283, guid: 4379caabba0fda041a456a104ebaa4a1,
     type: 3}
   DnaPair: {fileID: 1132590227607621666, guid: cd3de1cae9fd8ad48925f6eeefdcaa5b, type: 3}
+  RedMaterial: {fileID: 2100000, guid: cb1653b4e5c73d5448259612c30dc74b, type: 2}
+  GreenMaterial: {fileID: 2100000, guid: 17a06ea780009a747a05957bd80c9b74, type: 2}
+  BlueMaterial: {fileID: 2100000, guid: 4b619bcc177da7c49928dffa3fb12f10, type: 2}
+  YellowMaterial: {fileID: 2100000, guid: 2db2e34fcffcb4846850c0aaa2782c4a, type: 2}
+  FrameMaterial: {fileID: 2100000, guid: bfbf65a81c3a4444282783625f2e5732, type: 2}
   NumberOfDnaPairs: 64
+  RotatingSpeed: 15
+  YSpeed: 4
+  DnaChainInitialPosition: -3
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0

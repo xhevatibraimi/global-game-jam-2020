@@ -45,6 +45,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   FallingSpeed: 1.5
+  YSpeed: 4
+  RotatingSpeed: 15
 --- !u!54 &8350430007494456711
 Rigidbody:
   m_ObjectHideFlags: 0
