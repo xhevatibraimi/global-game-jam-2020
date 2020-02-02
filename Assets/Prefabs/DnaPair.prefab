@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1132590227565720030}
   m_Layer: 0
   m_Name: NodeSphereRight
-  m_TagString: node
+  m_TagString: NodeRight
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -425,7 +425,7 @@ GameObject:
   - component: {fileID: 1132590228394304545}
   m_Layer: 0
   m_Name: NodeSphereLeft
-  m_TagString: node
+  m_TagString: NodeLeft
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

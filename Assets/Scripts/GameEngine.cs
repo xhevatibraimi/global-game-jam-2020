@@ -28,7 +28,7 @@ public class GameEngine : MonoBehaviour
 
     private List<Material> Colors = new List<Material>();
     private Material previousMaterial = null;
-    private System.Random random = new System.Random();
+    private static System.Random random = new System.Random();
     void Start()
     {
         InitColors();
@@ -40,10 +40,17 @@ public class GameEngine : MonoBehaviour
         var randomNumber = random.Next(0, 4);
         previousMaterial = Colors[randomNumber];
 
+        // root object
         var rootObject = Instantiate(RootObject);
+
+        // falling object
         var fallingObject = Instantiate(FallingObject);
         fallingObject.transform.parent = rootObject.transform;
-        var dnaChainObject = Instantiate(DnaChain, new Vector3(0, DnaChainInitialPosition, 0), new Quaternion(), fallingObject.transform);
+        
+        // dna chain
+        var dnaChainObject = Instantiate(DnaChain);
+        dnaChainObject.transform.localPosition = new Vector3(0, DnaChainInitialPosition, 0);
+        dnaChainObject.transform.parent = fallingObject.transform;
 
         var counter = 0;
         var rotationY = 0.0f;
@@ -95,8 +102,6 @@ public class GameEngine : MonoBehaviour
 
     private GameObject InstantiateDnaPair(DnaPairMode pairMode)
     {
-        var dnaPair = Instantiate(DnaPair);
-
         switch (pairMode)
         {
             case DnaPairMode.BothMissing:
@@ -116,13 +121,13 @@ public class GameEngine : MonoBehaviour
         foreach (var renderer in dnaPair.GetComponentsInChildren<Renderer>())
         {
             if (renderer.gameObject.tag == Constants.Tags.Frame)
-                renderer.material = FrameMaterial;
+                renderer.material = ColorMissing;
             else if (renderer.gameObject.tag == Constants.Tags.NodeLeft)
-                renderer.material = GetRandomMaterial();
+                renderer.material = ColorMissing;
             else if (renderer.gameObject.tag == Constants.Tags.BridgeLeft)
                 renderer.material = ColorMissing;
             else if (renderer.gameObject.tag == Constants.Tags.NodeRight)
-                renderer.material = GetRandomMaterial();
+                renderer.material = ColorMissing;
             else if (renderer.gameObject.tag == Constants.Tags.BridgeRight)
                 renderer.material = ColorMissing;
         }
@@ -135,15 +140,15 @@ public class GameEngine : MonoBehaviour
         {
             var rightColor = GetRandomMaterial();
             if (renderer.gameObject.tag == Constants.Tags.Frame)
-                renderer.material = FrameMaterial;
+                renderer.material = ColorMissing;
             else if (renderer.gameObject.tag == Constants.Tags.NodeLeft)
-                renderer.material = GetRandomMaterial();
+                renderer.material = ColorMissing;
             else if (renderer.gameObject.tag == Constants.Tags.BridgeLeft)
                 renderer.material = ColorMissing;
             else if (renderer.gameObject.tag == Constants.Tags.NodeRight)
-                renderer.material = rightColor;
+                renderer.material = ColorMissing;
             else if (renderer.gameObject.tag == Constants.Tags.BridgeRight)
-                renderer.material = rightColor;
+                renderer.material = ColorMissing;
         }
         return dnaPair;
     }
@@ -154,13 +159,13 @@ public class GameEngine : MonoBehaviour
         {
             var leftColor = GetRandomMaterial();
             if (renderer.gameObject.tag == Constants.Tags.Frame)
-                renderer.material = FrameMaterial;
+                renderer.material = ColorMissing;
             else if (renderer.gameObject.tag == Constants.Tags.NodeLeft)
-                renderer.material = leftColor;
+                renderer.material = ColorMissing;
             else if (renderer.gameObject.tag == Constants.Tags.BridgeLeft)
-                renderer.material = leftColor;
+                renderer.material = ColorMissing;
             else if (renderer.gameObject.tag == Constants.Tags.NodeRight)
-                renderer.material = GetRandomMaterial();
+                renderer.material = ColorMissing;
             else if (renderer.gameObject.tag == Constants.Tags.BridgeRight)
                 renderer.material = ColorMissing;
         }
@@ -174,15 +179,15 @@ public class GameEngine : MonoBehaviour
             var leftColor = GetRandomMaterial();
             var rightColor = GetRandomMaterial();
             if (renderer.gameObject.tag == Constants.Tags.Frame)
-                renderer.material = FrameMaterial;
+                renderer.material = ColorMissing;
             else if (renderer.gameObject.tag == Constants.Tags.NodeLeft)
                 renderer.material = leftColor;
             else if (renderer.gameObject.tag == Constants.Tags.BridgeLeft)
-                renderer.material = leftColor;
+                renderer.material = ColorMissing;
             else if (renderer.gameObject.tag == Constants.Tags.NodeRight)
-                renderer.material = rightColor;
+                renderer.material = ColorMissing;
             else if (renderer.gameObject.tag == Constants.Tags.BridgeRight)
-                renderer.material = rightColor;
+                renderer.material = ColorMissing;
         }
         return dnaPair;
     }
