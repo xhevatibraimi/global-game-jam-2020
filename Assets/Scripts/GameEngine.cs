@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -29,6 +30,7 @@ public class GameEngine : MonoBehaviour
     private List<Material> Colors = new List<Material>();
     private List<DnaPairModel> DnaPairsList = new List<DnaPairModel>();
     private static System.Random random = new System.Random();
+    private int GameScore = 0;
     void Start()
     {
         InitColors();
@@ -44,8 +46,8 @@ public class GameEngine : MonoBehaviour
         if (HasInput())
         {
             // check for clicks
-            var inputSum = CalculateInput();
-            HandleKickAction(inputSum);
+            var input = GetInput();
+            HandleKickAction(input);
         }
         else
         {
@@ -61,15 +63,16 @@ public class GameEngine : MonoBehaviour
     }
 
     #region Handle Kick Action
-    private static int CalculateInput()
+    private static bool[] GetInput()
     {
-        var inputOne = Input.GetKeyDown(KeyCode.Z) ? 1 : 0;
-        var inputTwo = Input.GetKeyDown(KeyCode.X) ? 2 : 0;
-        var inputThree = Input.GetKeyDown(KeyCode.N) ? 4 : 0;
-        var inputFour = Input.GetKeyDown(KeyCode.M) ? 8 : 0;
-        return inputOne + inputTwo + inputThree + inputFour;
+        return new bool[] {
+            Input.GetKeyDown(KeyCode.Z),
+            Input.GetKeyDown(KeyCode.X),
+            Input.GetKeyDown(KeyCode.N),
+            Input.GetKeyDown(KeyCode.M)
+        };
     }
-    private void HandleKickAction(int input)
+    private void HandleKickAction(bool[] input)
     {
         var dnaPair = GetElementInActionRange();
         if (dnaPair == null)
@@ -79,20 +82,83 @@ public class GameEngine : MonoBehaviour
 
         var renderers = dnaPair.ChildRenderers;
         var leftBridge = renderers.FirstOrDefault(x => x.gameObject.tag == Constants.Tags.BridgeLeft);
-        var rightBridge = renderers.FirstOrDefault(x => x.gameObject.tag == Constants.Tags.BridgeRight);
+        var leftBridgeColor = leftBridge.material.color;
+        var rightBridgeColor = renderers.FirstOrDefault(x => x.gameObject.tag == Constants.Tags.BridgeRight).material.color;
 
-        if (leftBridge.material.color == ColorMissing.color || leftBridge.material.color == ColorMissing.color)
+        if (leftBridgeColor == ColorMissing.color || rightBridgeColor == ColorMissing.color)
         {
-            Debug.Log("yes missing");
-            //var leftNode = renderers.FirstOrDefault(x => x.gameObject.tag == Constants.Tags.NodeLeft);
-            //var rightNode = renderers.FirstOrDefault(x => x.gameObject.tag == Constants.Tags.NodeRight);
+            if (dnaPair.IsHandled)
+                return;
+
+            // MISSING
+            var leftNodeColor = renderers.FirstOrDefault(x => x.gameObject.tag == Constants.Tags.NodeLeft).material.color;
+            var rightNodeColor = renderers.FirstOrDefault(x => x.gameObject.tag == Constants.Tags.NodeRight).material.color;
+            var clickedColors = GetClickedColors(input);
+            if (leftBridgeColor == ColorMissing.color && rightBridgeColor == ColorMissing.color)
+            {
+                // both missing
+                if (clickedColors.Contains(leftNodeColor) && clickedColors.Contains(rightNodeColor) && clickedColors.Count == 2)
+                    IncrementScore(2);
+                else
+                    DecrementScore();
+            }
+            else if (leftBridgeColor == ColorMissing.color)
+            {
+                // left missing
+                if (clickedColors.Contains(leftNodeColor) && clickedColors.Count == 1)
+                    IncrementScore(1);
+                else
+                    DecrementScore();
+            }
+            else if (rightBridgeColor == ColorMissing.color)
+            {
+                // right missing
+                if (clickedColors.Contains(rightNodeColor) && clickedColors.Count == 1)
+                    IncrementScore(1);
+                else
+                    DecrementScore();
+            }
+            dnaPair.IsHandled = true;
         }
         else
         {
+            //NOT MISSING 
             Debug.Log("no missing");
         }
-        dnaPair.IsHandled = true;
     }
+
+    private void DecrementScore()
+    {
+        GameScore--;
+        UpdateScore();
+    }
+
+    private void IncrementScore(int points)
+    {
+        GameScore += points;
+        UpdateScore();
+    }
+
+    private void UpdateScore()
+    {
+        if (GameScore < 0) GameScore = 0;
+        Debug.ClearDeveloperConsole();
+        Debug.Log(GameScore);
+    }
+
+    private List<Color> GetClickedColors(bool[] input)
+    {
+        var colors = new List<Color>();
+        for (int i = 0; i < Colors.Count; i++)
+        {
+            if (input[i])
+            {
+                colors.Add(Colors[i].color);
+            }
+        }
+        return colors;
+    }
+
     private bool RendererHasMaterial(Renderer renderer, ActionColor color)
     {
         return renderer.material == Colors[(int)color - 1];
