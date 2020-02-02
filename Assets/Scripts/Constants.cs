@@ -7,5 +7,6 @@
         public const string NodeLeft = "NodeLeft";
         public const string NodeRight = "NodeRight";
         public const string Frame = "Frame";
+        public const string DnaPair = "DnaPair";
     }
 }
