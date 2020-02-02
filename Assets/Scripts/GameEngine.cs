@@ -36,9 +36,9 @@ public class GameEngine : MonoBehaviour
     private static System.Random random = new System.Random();
     private int GameScore = 0;
     public static GameState GameState = GameState.NotStarted;
-
     void Start()
     {
+        GetComponent<AudioSource>().Play();
         InitColors();
         InitChain();
     }
