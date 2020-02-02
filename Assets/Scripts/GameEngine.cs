@@ -82,38 +82,35 @@ public class GameEngine : MonoBehaviour
 
         var renderers = dnaPair.ChildRenderers;
         var leftBridge = renderers.FirstOrDefault(x => x.gameObject.tag == Constants.Tags.BridgeLeft);
-        var leftBridgeColor = leftBridge.material.color;
-        var rightBridgeColor = renderers.FirstOrDefault(x => x.gameObject.tag == Constants.Tags.BridgeRight).material.color;
+        var rightBridge = renderers.FirstOrDefault(x => x.gameObject.tag == Constants.Tags.BridgeRight);
 
-        if (leftBridgeColor == ColorMissing.color || rightBridgeColor == ColorMissing.color)
+        if (dnaPair.MissingColors.Any())
         {
             if (dnaPair.IsHandled)
                 return;
 
             // MISSING
-            var leftNodeColor = renderers.FirstOrDefault(x => x.gameObject.tag == Constants.Tags.NodeLeft).material.color;
-            var rightNodeColor = renderers.FirstOrDefault(x => x.gameObject.tag == Constants.Tags.NodeRight).material.color;
             var clickedColors = GetClickedColors(input);
-            if (leftBridgeColor == ColorMissing.color && rightBridgeColor == ColorMissing.color)
+            if (dnaPair.LeftIsMissing && dnaPair.RightIsMissing)
             {
                 // both missing
-                if (clickedColors.Contains(leftNodeColor) && clickedColors.Contains(rightNodeColor) && clickedColors.Count == 2)
+                if (clickedColors.Contains(Colors[dnaPair.MissingColors[0]].color) && clickedColors.Contains(Colors[dnaPair.MissingColors[1]].color) && clickedColors.Count == 2)
                     IncrementScore(2);
                 else
                     DecrementScore();
             }
-            else if (leftBridgeColor == ColorMissing.color)
+            else if (dnaPair.LeftIsMissing)
             {
                 // left missing
-                if (clickedColors.Contains(leftNodeColor) && clickedColors.Count == 1)
+                if (clickedColors.Contains(Colors[dnaPair.MissingColors[0]].color) && clickedColors.Count == 1)
                     IncrementScore(1);
                 else
                     DecrementScore();
             }
-            else if (rightBridgeColor == ColorMissing.color)
+            else if (dnaPair.RightIsMissing)
             {
                 // right missing
-                if (clickedColors.Contains(rightNodeColor) && clickedColors.Count == 1)
+                if (clickedColors.Contains(Colors[dnaPair.MissingColors[0]].color) && clickedColors.Count == 1)
                     IncrementScore(1);
                 else
                     DecrementScore();
@@ -211,10 +208,23 @@ public class GameEngine : MonoBehaviour
         Colors.Add(ColorThree);
         Colors.Add(ColorFour);
     }
-    private (Material Left, Material Right) GetRandomColorPair()
+    private (Material Left, Material Right, int leftColorIndex, int rightColorIndex) GetRandomColorPair()
     {
         var materials = Colors.OrderBy(_ => Guid.NewGuid().ToString()).ToList();
-        return (materials[0], materials[1]);
+        int leftColorIndex = 0;
+        int rightColorIndex = 0;
+        for (int i = 0; i < Colors.Count; i++)
+        {
+            if (materials[0].color == Colors[i].color)
+            {
+                leftColorIndex = i;
+            }
+            if (materials[1].color == Colors[i].color)
+            {
+                leftColorIndex = i;
+            }
+        }
+        return (materials[0], materials[1], leftColorIndex, rightColorIndex);
     }
     private void ConfigurePair(DnaPairMode pairMode, DnaPairModel pair)
     {
@@ -236,9 +246,12 @@ public class GameEngine : MonoBehaviour
     }
     private void ConfigureBothMissingDnaPair(DnaPairModel pair)
     {
-        var (leftColor, rightColor) = GetRandomColorPair();
-        pair.ColorsMissing.Add(FindColorIndex(leftColor));
-        pair.ColorsMissing.Add(FindColorIndex(rightColor));
+        var (leftColor, rightColor, leftColorIndex, rightColorIndex) = GetRandomColorPair();
+        pair.MissingColors.Add(leftColorIndex);
+        pair.MissingColors.Add(rightColorIndex);
+        pair.LeftIsMissing = true;
+        pair.RightIsMissing = true;
+
         foreach (var renderer in pair.ChildRenderers)
         {
             if (renderer.gameObject.tag == Constants.Tags.Frame)
@@ -255,23 +268,15 @@ public class GameEngine : MonoBehaviour
 
         }
     }
-    int FindColorIndex(Material material)
-    {
-        for (int i = 0; i < Colors.Count; i++)
-        {
-            if (material.color == Colors[i].color)
-                return i;
-        }
-        return 0;
-    }
+
     private void ConfigureLeftMissingDnaPair(DnaPairModel pair)
     {
-        var (leftColor, rightColor) = GetRandomColorPair();
-        pair.ColorsMissing.Add(FindColorIndex(leftColor));
+        var (leftColor, rightColor, leftColorIndex, rightColorMissing) = GetRandomColorPair();
+        pair.MissingColors.Add(leftColorIndex);
+        pair.LeftIsMissing = true;
 
         foreach (var renderer in pair.ChildRenderers)
         {
-
             if (renderer.gameObject.tag == Constants.Tags.Frame)
                 renderer.material = FrameMaterial;
 
@@ -288,8 +293,9 @@ public class GameEngine : MonoBehaviour
     }
     private void ConfigureRightMissingDnaPair(DnaPairModel pair)
     {
-        var (leftColor, rightColor) = GetRandomColorPair();
-        pair.ColorsMissing.Add(FindColorIndex(rightColor));
+        var (leftColor, rightColor, leftColorIndex, rightColorIndex) = GetRandomColorPair();
+        pair.MissingColors.Add(rightColorIndex);
+        pair.RightIsMissing = true;
 
         foreach (var renderer in pair.ChildRenderers)
         {
@@ -309,7 +315,7 @@ public class GameEngine : MonoBehaviour
     }
     private void ConfigureDefaultDnaPair(DnaPairModel pair)
     {
-        var (leftColor, rightColor) = GetRandomColorPair();
+        var (leftColor, rightColor, leftColorIndex, rightColorIndex) = GetRandomColorPair();
         foreach (var renderer in pair.ChildRenderers)
         {
             if (renderer.gameObject.tag == Constants.Tags.Frame)

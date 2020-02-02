@@ -6,12 +6,13 @@ public class DnaPairModel
     public int InstanceId { get; set; }
     public GameObject GameObj { get; set; }
     public List<Renderer> ChildRenderers { get; set; }
-    public List<int> ColorsMissing { get; set; }
+    public List<int> MissingColors { get; set; }
     public bool IsHandled { get; set; }
-
+    public bool LeftIsMissing { get; set; }
+    public bool RightIsMissing { get; set; }
     public DnaPairModel()
     {
         ChildRenderers = new List<Renderer>();
-        ColorsMissing = new List<int>();
+        MissingColors = new List<int>();
     }
 }
