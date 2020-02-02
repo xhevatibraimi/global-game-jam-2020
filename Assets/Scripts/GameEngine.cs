@@ -55,10 +55,6 @@ public class GameEngine : MonoBehaviour
             var input = GetInput();
             HandleKickAction(input);
         }
-        else
-        {
-            // check formissing zone
-        }
     }
     private bool HasInput()
     {
@@ -135,6 +131,7 @@ public class GameEngine : MonoBehaviour
     private void IncrementScore(int points)
     {
         GameScore += points;
+        Debug.Log(GameScore);
         UpdateScore();
     }
     private void UpdateScore()
@@ -158,9 +155,11 @@ public class GameEngine : MonoBehaviour
     }
     private DnaPairModel GetElementInActionRange()
     {
-        var element = DnaPairsList.FirstOrDefault(dnaPair => dnaPair.GameObj.transform.position.y > ActionRangeDown
-            && dnaPair.GameObj.transform.position.y < ActionRangeUp);
-        return element;
+        var dnaPairs = GameObject.FindGameObjectsWithTag(Constants.Tags.DnaPair);
+        var element = dnaPairs.FirstOrDefault(dnaPair => dnaPair.GetComponent<Transform>().position.y > ActionRangeDown
+            && dnaPair.GetComponent<Transform>().position.y < ActionRangeUp);
+        var result = DnaPairsList.FirstOrDefault(x => x.InstanceId == element.GetInstanceID());
+        return result;
     }
     #endregion
 
