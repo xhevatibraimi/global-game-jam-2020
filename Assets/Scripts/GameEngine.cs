@@ -42,44 +42,39 @@ public class GameEngine : MonoBehaviour
     }
     private void HandleInput()
     {
-            HandleKickAction(ActionColor.ColorOne, IsChord: false);
-        if (Input.GetKeyDown(KeyCode.Z))
-        {
-        }
-        if (Input.GetKeyDown(KeyCode.X))
-        {
-
-        }
-        if (Input.GetKeyDown(KeyCode.N))
-        {
-
-        }
-        if (Input.GetKeyDown(KeyCode.M))
-        {
-
-        }
+        var input = CalculateInput();
+        HandleKickAction(ActionColor.ColorOne, input);
     }
 
-    private void HandleKickAction(ActionColor color, bool IsChord)
+    private static int CalculateInput()
+    {
+        var inputOne = Input.GetKeyDown(KeyCode.Z) ? 1 : 0;
+        var inputTwo = Input.GetKeyDown(KeyCode.X) ? 2 : 0;
+        var inputThree = Input.GetKeyDown(KeyCode.N) ? 4 : 0;
+        var inputFour = Input.GetKeyDown(KeyCode.M) ? 8 : 0;
+        return inputOne + inputTwo + inputThree + inputFour;
+    }
+
+    private void HandleKickAction(ActionColor color, int input)
     {
         var dnaPair = GetElementInActionRange();
+        if (dnaPair == null)
+            return;
         var renderers = dnaPair.ChildRenderers;
         var leftBridge = renderers.FirstOrDefault(x => x.gameObject.tag == Constants.Tags.BridgeLeft);
         var rightBridge = renderers.FirstOrDefault(x => x.gameObject.tag == Constants.Tags.BridgeRight);
 
-        var leftNode = renderers.FirstOrDefault(x => x.gameObject.tag == Constants.Tags.NodeLeft);
-        var rightNode = renderers.FirstOrDefault(x => x.gameObject.tag == Constants.Tags.NodeRight);
-
-        if (IsChord)
+        if (leftBridge.material == ColorMissing || leftBridge.material == ColorMissing)
         {
-            //(RendererHasMaterial(leftNode, color) && RendererHasMaterial())
-
+            Debug.Log("missing");
+            var leftNode = renderers.FirstOrDefault(x => x.gameObject.tag == Constants.Tags.NodeLeft);
+            var rightNode = renderers.FirstOrDefault(x => x.gameObject.tag == Constants.Tags.NodeRight);
         }
         else
         {
+            Debug.Log("not missing");
 
         }
-
     }
 
     private bool RendererHasMaterial(Renderer renderer, ActionColor color)
