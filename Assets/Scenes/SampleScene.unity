@@ -211,8 +211,8 @@ MonoBehaviour:
   RotatingSpeed: 15
   YSpeed: 4
   DnaChainInitialPosition: 0
-  ActionRangeDown: -4
-  ActionRangeUp: -2
+  ActionRangeDown: -10
+  ActionRangeUp: -6
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
