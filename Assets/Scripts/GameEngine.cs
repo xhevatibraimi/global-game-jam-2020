@@ -43,29 +43,68 @@ public class GameEngine : MonoBehaviour
         var fallingObject = Instantiate(FallingObject);
         fallingObject.transform.parent = rootObject.transform;
         var dnaChainObject = Instantiate(DnaChain, new Vector3(0, DnaChainInitialPosition, 0), new Quaternion(), fallingObject.transform);
-        //dnaChainObject.transform.parent = fallingObject.transform;
 
         var counter = 0;
         var rotationY = 0.0f;
         var positionY = 0.0f;
+        bool isOddDnaPairPosition = false;
         while (counter < NumberOfDnaPairs)
         {
+            isOddDnaPairPosition = !isOddDnaPairPosition;
             var dnaPair = InstantiateDnaPair();
             dnaPair.transform.localPosition = new Vector3(0, positionY, 0);
             dnaPair.transform.localRotation = Quaternion.Euler(0, rotationY, 0);
             dnaPair.transform.parent = dnaChainObject.transform;
 
-
             var childRenderers = dnaPair.GetComponentsInChildren<Renderer>();
 
             foreach (var renderer in childRenderers)
             {
-                if (renderer.gameObject.CompareTag("Bridge"))
+                bool isLeftBridge = renderer.gameObject.tag =="BridgeLeft";
+                bool isRightBridge = renderer.gameObject.tag =="BridgeRight";
+
+                // isBridge
+                if (isLeftBridge || isRightBridge)
                 {
-                    renderer.material = GetRandomMaterial();
+                    if (isOddDnaPairPosition)
+                    {
+                        renderer.material = GetRandomMaterial();
+                    }
+                    else
+                    {
+                        #region Create Variation
+                        var randomNumber1to3 = random.Next(0, 3);
+
+                        // left missing
+                        if (randomNumber == 1)
+                        {
+                            renderer.material = GetRandomMaterial();
+                            if (isLeftBridge)
+                            {
+                                renderer.material.color = new Color(renderer.material.color.r, renderer.material.color.g, renderer.material.color.b, 127);
+                            }
+                        }
+                        // right missing
+                        else if (randomNumber == 2)
+                        {
+                            renderer.material = GetRandomMaterial();
+                            if (isRightBridge)
+                            {
+                                renderer.material.color = new Color(renderer.material.color.r, renderer.material.color.g, renderer.material.color.b, 127);
+                            }
+                        }
+                        // both missing
+                        else if (randomNumber == 3)
+                        {
+                            renderer.material = GetRandomMaterial();
+                            renderer.material.color = new Color(renderer.material.color.r, renderer.material.color.g, renderer.material.color.b, 127);
+                        }
+                        #endregion
+                    }
                 }
                 else
                 {
+                    // frame
                     renderer.material = FrameMaterial;
                 }
             }
