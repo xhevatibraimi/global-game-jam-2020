@@ -10,6 +10,8 @@ public class UIControl : MonoBehaviour
     public GameObject Score;
 
     public GameObject GameOver;
+
+    public GameObject UIBlocker;
     // Start is called before the first frame update
     void Start()
     {
@@ -27,6 +29,7 @@ public class UIControl : MonoBehaviour
         StartButton.SetActive(false);
         Score.SetActive(true);
         GameOver.SetActive(false);
+        UIBlocker.SetActive(false);
         // game start here
     }
 
