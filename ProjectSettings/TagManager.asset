@@ -9,6 +9,7 @@ TagManager:
   - Frame
   - NodeLeft
   - NodeRight
+  - Root
   layers:
   - Default
   - TransparentFX

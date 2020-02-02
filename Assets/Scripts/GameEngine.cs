@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -42,10 +41,26 @@ public class GameEngine : MonoBehaviour
     }
     private void HandleInput()
     {
-        var input = CalculateInput();
-        HandleKickAction(ActionColor.ColorOne, input);
+        if (HasInput())
+        {
+            // check for clicks
+            var inputSum = CalculateInput();
+            HandleKickAction(inputSum);
+        }
+        else
+        {
+            // check formissing zone
+        }
+    }
+    private bool HasInput()
+    {
+        return Input.GetKey(KeyCode.Z)
+            || Input.GetKey(KeyCode.X)
+            || Input.GetKey(KeyCode.N)
+            || Input.GetKey(KeyCode.M);
     }
 
+    #region Handle Kick Action
     private static int CalculateInput()
     {
         var inputOne = Input.GetKeyDown(KeyCode.Z) ? 1 : 0;
@@ -54,54 +69,54 @@ public class GameEngine : MonoBehaviour
         var inputFour = Input.GetKeyDown(KeyCode.M) ? 8 : 0;
         return inputOne + inputTwo + inputThree + inputFour;
     }
-
-    private void HandleKickAction(ActionColor color, int input)
+    private void HandleKickAction(int input)
     {
         var dnaPair = GetElementInActionRange();
         if (dnaPair == null)
+        {
             return;
+        }
+
         var renderers = dnaPair.ChildRenderers;
         var leftBridge = renderers.FirstOrDefault(x => x.gameObject.tag == Constants.Tags.BridgeLeft);
         var rightBridge = renderers.FirstOrDefault(x => x.gameObject.tag == Constants.Tags.BridgeRight);
 
-        if (leftBridge.material == ColorMissing || leftBridge.material == ColorMissing)
+        if (leftBridge.material.color == ColorMissing.color || leftBridge.material.color == ColorMissing.color)
         {
-            Debug.Log("missing");
-            var leftNode = renderers.FirstOrDefault(x => x.gameObject.tag == Constants.Tags.NodeLeft);
-            var rightNode = renderers.FirstOrDefault(x => x.gameObject.tag == Constants.Tags.NodeRight);
+            Debug.Log("yes missing");
+            //var leftNode = renderers.FirstOrDefault(x => x.gameObject.tag == Constants.Tags.NodeLeft);
+            //var rightNode = renderers.FirstOrDefault(x => x.gameObject.tag == Constants.Tags.NodeRight);
         }
         else
         {
-            Debug.Log("not missing");
-
+            Debug.Log("no missing");
         }
+        dnaPair.IsHandled = true;
     }
-
     private bool RendererHasMaterial(Renderer renderer, ActionColor color)
     {
         return renderer.material == Colors[(int)color - 1];
     }
-
     private DnaPairModel GetElementInActionRange()
     {
         var element = DnaPairsList.FirstOrDefault(dnaPair => dnaPair.GameObj.transform.position.y > ActionRangeDown
             && dnaPair.GameObj.transform.position.y < ActionRangeUp);
         return element;
     }
-
+    #endregion
     #region Initialize
     private void InitChain()
     {
         // root object
-        var rootObject = Instantiate(RootObject);
+        RootObject.transform.position = new Vector3(0, DnaChainInitialPosition, 0);
 
         // falling object
         var fallingObject = Instantiate(FallingObject);
-        fallingObject.transform.parent = rootObject.transform;
+        fallingObject.transform.parent = RootObject.transform;
 
         // dna chain
         var dnaChainObject = Instantiate(DnaChain);
-        dnaChainObject.transform.localPosition = new Vector3(0, DnaChainInitialPosition, 0);
+        dnaChainObject.transform.localPosition = new Vector3(0, 0, 0);
         dnaChainObject.transform.parent = fallingObject.transform;
 
         var counter = 0;
@@ -246,6 +261,7 @@ public class GameEngine : MonoBehaviour
             var dnaPair = new DnaPairModel();
             dnaPair.GameObj = Instantiate(go);
             dnaPair.GameObj.transform.parent = parent;
+            dnaPair.GameObj.transform.localPosition = Vector3.zero;
             dnaPair.ChildRenderers = dnaPair.GameObj.GetComponentsInChildren<Renderer>().ToList();
             DnaPairsList.Add(dnaPair);
         }

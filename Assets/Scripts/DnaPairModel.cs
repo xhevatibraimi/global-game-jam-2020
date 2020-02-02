@@ -5,4 +5,5 @@ public class DnaPairModel
 {
     public GameObject GameObj { get; set; }
     public List<Renderer> ChildRenderers { get; set; }
+    public bool IsHandled { get; set; }
 }
