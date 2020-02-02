@@ -5,6 +5,10 @@ using UnityEngine;
 
 public class GameEngine : MonoBehaviour
 {
+    // UI 
+    public GameObject UICanvas;
+    // UI END
+
     public GameObject FallingObject;
     public GameObject RootObject;
     public GameObject DnaChain;
@@ -133,6 +137,9 @@ public class GameEngine : MonoBehaviour
     private void UpdateScore()
     {
         if (GameScore < 0) GameScore = 0;
+        UICanvas.GetComponent<UIControl>().UpdateScore(GameScore);
+        // Debug.ClearDeveloperConsole();
+        // Debug.Log(GameScore);
     }
     private List<int> GetClickedColors(bool[] input)
     {
